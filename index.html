@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAL System - Lille</title>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        #track { width: 100%; height: 10px; background: #444; position: relative; top: 100px; }
+        #train { width: 120px; height: 45px; background: white; border-bottom: 6px solid #ed1c24; position: absolute; left: -150px; transition: left 3s ease-out; border-radius: 4px; }
+        #station { width: 200px; height: 10px; background: #666; border-top: 3px solid #00adef; position: absolute; left: 50%; transform: translateX(-50%); top: 105px; }
+        #status { margin-top: 150px; font-weight: bold; padding: 10px; background: #333; border-radius: 8px; min-width: 250px; text-align: center; }
+        .door-light { width: 10px; height: 10px; background: orange; border-radius: 50%; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); display: none; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <h1>Simulation VAL - Lille</h1>
+    
+    <div id="track">
+        <div id="station"></div>
+        <div id="train">
+            <div id="light" class="door-light"></div>
+        </div>
+    </div>
+
+    <div id="status">Le train est en approche...</div>
+
+    <script>
+        const train = document.getElementById('train');
+        const status = document.getElementById('status');
+        const light = document.getElementById('light');
+
+        // 1. Arrivée du train
+        setTimeout(() => {
+            train.style.left = "calc(50% - 60px)";
+            status.innerText = "ARRÊT : Le train est à quai.";
+            
+            // 2. Cycle Lillois : Ouverture portes train
+            setTimeout(() => {
+                status.innerText = "ÉTAPE 1 : Ouverture des portes du train...";
+                
+                // 3. Tes 5 secondes d'attente avant les portes palières
+                setTimeout(() => {
+                    status.innerText = "ÉTAPE 2 : Ouverture des portes palières (5s écoulées)";
+                    status.style.color = "#00adef";
+                    
+                    // 4. Signal sonore et départ après un délai
+                    setTimeout(lancerSignal, 4000);
+                }, 5000);
+            }, 1000);
+        }, 1000);
+
+        function lancerSignal() {
+            status.innerText = "SIGNAL SONORE : BIP BIP BIP !";
+            status.style.color = "orange";
+            light.style.display = "block";
+            light.style.animation = "blink 0.5s infinite";
+            
+            setTimeout(() => {
+                status.innerText = "DÉPART : Fermeture et accélération.";
+                status.style.color = "white";
+                light.style.display = "none";
+                train.style.left = "110%";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
